@@ -1,4 +1,4 @@
-#commit mohammed hatem
+#commit by mohammed hatem
 import PyPDF2
 import os
 import random
@@ -31,3 +31,41 @@ def read_pdf(file_path):
         return ""
 
     return text
+#commit by mohamed ehab
+    def parse_questions(text):
+    questions = []
+    blocks = text.split("[LEVEL:")
+
+    for block in blocks[1:]:
+        try:
+            lines = block.strip().split("\n")
+            level = lines[0].replace("]", "").strip().lower()
+
+            q = ""
+            choices = []
+            answer = ""
+
+            for line in lines[1:]:
+                line = line.strip()
+
+                if line.startswith("Q:"):
+                    q = line.replace("Q:", "").strip()
+
+                elif line.startswith(("A)", "B)", "C)", "D)")):
+                    choices.append(line)
+
+                elif line.startswith("ANSWER:"):
+                    answer = line.replace("ANSWER:", "").strip()
+
+            if q and len(choices) >= 2:
+                questions.append({
+                    "question": q,
+                    "choices": choices,
+                    "answer": answer if answer else "N/A",
+                    "level": level
+                })
+
+        except Exception:
+            continue
+
+    return questions
