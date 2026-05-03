@@ -76,8 +76,6 @@ def parse_questions(text):
     
  #Commit by Mahmoud Ali
 
-import random
-
 def filter_by_range(questions, start, end):
     if start < 1 or end > len(questions) or start > end:
         print("Invalid range!")
@@ -96,10 +94,6 @@ def select_questions(questions, level, num):
     return random.sample(filtered, num)
     
 #Commit by Feras Nofal 
-
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.lib.pagesizes import letter
 
 def create_exam_pdf(questions, filename):
     doc = SimpleDocTemplate(filename, pagesize=letter)
@@ -137,12 +131,6 @@ def create_answer_pdf(questions, filename):
     doc.build(content)
     
 #Commit by Abdelrhman Magdi
-
-from pdf_reader import read_pdf
-from parser import parse_questions
-from filters import filter_by_range, select_questions
-from pdf_generator import create_exam_pdf, create_answer_pdf
-import random
 
 def main():
     print("===== Advanced Exam Generator =====")
