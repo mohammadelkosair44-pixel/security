@@ -88,3 +88,42 @@ def select_questions(questions, level, num):
 
     num = min(num, len(filtered))
     return random.sample(filtered, num)
+    #commit by feras nofal 
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.pagesizes import letter
+
+def create_exam_pdf(questions, filename):
+    doc = SimpleDocTemplate(filename, pagesize=letter)
+    styles = getSampleStyleSheet()
+
+    content = []
+    content.append(Paragraph("<b>Final Exam</b>", styles['Title']))
+    content.append(Spacer(1, 20))
+
+    for i, q in enumerate(questions, 1):
+        content.append(Paragraph(f"Q{i}: {q['question']}", styles['Normal']))
+        content.append(Spacer(1, 10))
+
+        for choice in q["choices"]:
+            content.append(Paragraph(choice, styles['Normal']))
+            content.append(Spacer(1, 5))
+
+        content.append(Spacer(1, 15))
+
+    doc.build(content)
+
+
+def create_answer_pdf(questions, filename):
+    doc = SimpleDocTemplate(filename, pagesize=letter)
+    styles = getSampleStyleSheet()
+
+    content = []
+    content.append(Paragraph("<b>Answer Sheet</b>", styles['Title']))
+    content.append(Spacer(1, 20))
+
+    for i, q in enumerate(questions, 1):
+        content.append(Paragraph(f"Q{i}: {q['answer']}", styles['Normal']))
+        content.append(Spacer(1, 10))
+
+    doc.build(content)
