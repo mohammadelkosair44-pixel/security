@@ -69,3 +69,22 @@ def read_pdf(file_path):
             continue
 
     return questions
+    #commit by Mahmoud Ali
+    \import random
+
+def filter_by_range(questions, start, end):
+    if start < 1 or end > len(questions) or start > end:
+        print("Invalid range!")
+        return []
+    return questions[start-1:end]
+
+
+def select_questions(questions, level, num):
+    filtered = [q for q in questions if q["level"] == level]
+
+    if not filtered:
+        print("No questions found for this level!")
+        return []
+
+    num = min(num, len(filtered))
+    return random.sample(filtered, num)
