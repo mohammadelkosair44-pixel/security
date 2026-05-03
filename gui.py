@@ -1,10 +1,12 @@
-#commit by mohammed hatem
+#Commit by Mohammed Hatem
+
 import PyPDF2
 import os
 import random
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.pagesizes import letter
+
 def read_pdf(file_path):
     file_path = file_path.strip().strip('"').strip("'")
 
@@ -31,8 +33,10 @@ def read_pdf(file_path):
         return ""
 
     return text
-#commit by mohamed ehab
-    def parse_questions(text):
+    
+#Commit by Mohamed Ehab
+    
+def parse_questions(text):
     questions = []
     blocks = text.split("[LEVEL:")
 
@@ -69,8 +73,10 @@ def read_pdf(file_path):
             continue
 
     return questions
-    #commit by Mahmoud Ali
-    \import random
+    
+ #Commit by Mahmoud Ali
+
+import random
 
 def filter_by_range(questions, start, end):
     if start < 1 or end > len(questions) or start > end:
@@ -88,7 +94,9 @@ def select_questions(questions, level, num):
 
     num = min(num, len(filtered))
     return random.sample(filtered, num)
-    #commit by feras nofal 
+    
+#Commit by Feras Nofal 
+
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.pagesizes import letter
@@ -127,3 +135,76 @@ def create_answer_pdf(questions, filename):
         content.append(Spacer(1, 10))
 
     doc.build(content)
+    
+#Commit by Abdelrhman Magdi
+
+from pdf_reader import read_pdf
+from parser import parse_questions
+from filters import filter_by_range, select_questions
+from pdf_generator import create_exam_pdf, create_answer_pdf
+import random
+
+def main():
+    print("===== Advanced Exam Generator =====")
+
+    file_path = input("Enter PDF file path: ")
+    pdf_text = read_pdf(file_path)
+
+    if not pdf_text.strip():
+        print("Empty or unreadable PDF!")
+        return
+
+    questions = parse_questions(pdf_text)
+
+    if not questions:
+        print("No valid questions found!")
+        return
+
+    print(f"Total questions: {len(questions)}")
+
+    use_range = input("Use range? (y/n): ").lower()
+
+    if use_range == 'y':
+        try:
+            start = int(input("Start: "))
+            end = int(input("End: "))
+            questions = filter_by_range(questions, start, end)
+
+            if not questions:
+                return
+        except:
+            print("Invalid input!")
+            return
+
+    levels = sorted(set(q["level"] for q in questions))
+
+    print("\nAvailable Levels:")
+    for lvl in levels:
+        print(f"- {lvl}")
+
+    level = input("\nEnter level: ").strip().lower()
+
+    if level not in levels:
+        print("Invalid level!")
+        return
+
+    try:
+        num = int(input("Number of questions: "))
+    except:
+        print("Invalid number!")
+        return
+
+    selected = select_questions(questions, level, num)
+
+    if not selected:
+        return
+
+    random.shuffle(selected)
+
+    create_exam_pdf(selected, "exam.pdf")
+    create_answer_pdf(selected, "answers.pdf")
+
+    print("\nDone! Files created.")
+
+if _name_ == "_main_":
+    main()
